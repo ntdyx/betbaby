@@ -1,10 +1,14 @@
 // =================================================================
-// SCRIPT.JS - VERSÃO FINAL COM VALIDAÇÃO FRONTAL
+// SCRIPT.JS - VERSÃO DE TESTE DEFINITIVO (URL HARDCODED)
 // =================================================================
-const GOOGLE_SHEETS_URL = CONFIG.https://script.google.com/macros/s/AKfycbzxRn1NwT2mpTcQ5U7D7XFP4vex_qP7KCkWevEanTsnR8KtsmChyC-ISxea29p4DzVx/exec;
+
+// AQUI ESTÁ A CORREÇÃO: Colocamos a URL diretamente aqui, entre aspas.
+// Isso elimina qualquer problema que possa vir do config.js.
+const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzxRn1NwT2mpTcQ5U7D7XFP4vex_qP7KCkWevEanTsnR8KtsmChyC-ISxea29p4DzVx/exec';
+
+// O resto do código permanece o mesmo.
 let bets = [];
 
-// ... as funções sendToGoogleSheets e loadFromGoogleSheets não mudam ...
 async function sendToGoogleSheets(betData) {
     try {
         const response = await fetch(GOOGLE_SHEETS_URL, {
@@ -21,6 +25,7 @@ async function sendToGoogleSheets(betData) {
         return false;
     }
 }
+
 async function loadFromGoogleSheets() {
     try {
         const response = await fetch(GOOGLE_SHEETS_URL + '?action=get');
@@ -38,11 +43,11 @@ async function loadFromGoogleSheets() {
     }
 }
 
-// --- FUNÇÕES DE FORMATAÇÃO E UTILIDADE ---
 function setDynamicDateLimits() {
     const today = new Date().toISOString().split('T')[0];
     document.getElementById('date').setAttribute('min', today);
 }
+
 function formatDate(dateStr) {
     if (!dateStr) return 'Data Inválida';
     const date = new Date(dateStr);
@@ -50,6 +55,7 @@ function formatDate(dateStr) {
     date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
     return date.toLocaleDateString('pt-BR');
 }
+
 function formatTime(timeInput) {
     if (timeInput instanceof Date) {
         return timeInput.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
@@ -58,7 +64,6 @@ function formatTime(timeInput) {
     return 'Hora Inválida';
 }
 
-// --- FUNÇÕES DE ATUALIZAÇÃO DA INTERFACE ---
 function updateStats() {
     const totalBets = bets.length;
     document.getElementById('totalBets').textContent = totalBets;
@@ -74,6 +79,7 @@ function updateStats() {
     document.getElementById('avgWeight').textContent = `${avgWeight} kg`;
     document.getElementById('avgHeight').textContent = `${avgHeight} cm`;
 }
+
 function displayBets() {
     const betsList = document.getElementById('betsList');
     if (!bets || bets.length === 0) {
@@ -88,23 +94,16 @@ function displayBets() {
     }).join('');
 }
 
-// --- EVENT LISTENERS E INICIALIZAÇÃO ---
 document.getElementById('betForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     const submitBtn = document.querySelector('.submit-btn');
     const originalText = submitBtn.textContent;
-    
-    // --- NOVA VALIDAÇÃO ---
     const weightInput = document.getElementById('weight').value;
-    // Substitui vírgula por ponto para consistência
     const correctedWeight = weightInput.replace(',', '.');
-    // Verifica se o resultado é um número válido
     if (isNaN(parseFloat(correctedWeight))) {
         alert("Por favor, insira um valor de peso válido (ex: 3.2).");
-        return; // Para a execução se o peso for inválido
+        return;
     }
-    // --- FIM DA VALIDAÇÃO ---
-
     submitBtn.textContent = 'Enviando...';
     submitBtn.disabled = true;
 
@@ -112,7 +111,7 @@ document.getElementById('betForm').addEventListener('submit', async function(e) 
         name: document.getElementById('name').value,
         date: document.getElementById('date').value,
         time: document.getElementById('time').value,
-        weight: correctedWeight, // Usa o valor corrigido
+        weight: correctedWeight,
         height: document.getElementById('height').value,
         timestamp: new Date().toISOString()
     };
@@ -130,6 +129,5 @@ document.getElementById('betForm').addEventListener('submit', async function(e) 
     }
 });
 
-// Inicialização da página
 setDynamicDateLimits();
 loadFromGoogleSheets();
