@@ -2,21 +2,13 @@
    PALETA DE CORES E VARIÁVEIS
    ================================= */
 :root {
-    /* COR DE FUNDO PRINCIPAL (AJUSTADA CONFORME SOLICITADO) */
     --bg-dark: #24232A; 
-
-    /* Cor do "cartão" ligeiramente mais clara para um contraste sutil (tom sobre tom) */
     --card-bg: #302f36; 
-    
-    /* Cores de destaque mantidas para botões e títulos */
     --text-peach: #F2C4AE;
     --text-mint: #A9D0C3;
     --accent-blue: #B3D4D8;
-    
-    /* Texto principal e cor da borda ajustada para o novo fundo */
     --text-light: #F0F0F0;
-    --border-color: #44434b; /* Borda sutil */
-    
+    --border-color: #44434b;
     --font-primary: 'Poppins', 'Nunito', 'Arial', sans-serif;
 }
 
@@ -160,17 +152,16 @@ h2 {
     margin-bottom: 0;
 }
 
-.bet-name {
-    font-size: 1.2em;
-    font-weight: bold;
-    color: var(--text-peach);
-    margin-bottom: 5px;
+/* NOVAS REGRAS PARA A FRASE */
+.bet-item p {
+    line-height: 1.6;
+    font-size: 1.1em;
+    color: var(--text-light);
 }
 
-.bet-details {
-    font-size: 1em;
-    color: var(--text-light);
-    opacity: 0.9;
+.bet-item strong {
+    color: var(--text-peach);
+    font-weight: 600;
 }
 
 /* =================================
