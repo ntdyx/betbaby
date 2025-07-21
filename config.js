@@ -1,20 +1,10 @@
-// Configurações do projeto
+// =======================================================
+// ARQUIVO DE CONFIGURAÇÃO PRINCIPAL
+// =======================================================
 const CONFIG = {
-    GOOGLE_SHEETS_URL: 'https://script.google.com/macros/s/AKfycbyamznAjWjvJtz96hUJQ2cjKAYTTtQUbMLb2CDkJhIJAuTKEMI3EvdFppOnxBbQEETq/exec',
+    // IMPORTANTE: COLE AQUI A URL GERADA NA SUA ÚLTIMA IMPLANTAÇÃO!
+    GOOGLE_SHEETS_URL: 'https://script.google.com/macros/s/AKfycbzxRn1NwT2mpTcQ5U7D7XFP4vex_qP7KCkWevEanTsnR8KtsmChyC-ISxea29p4DzVx/exec',
+    
     APP_NAME: 'Bet Baby',
-    VERSION: '1.0.0',
-    
-    // Configurações de validação
-    VALIDATION: {
-        MIN_WEIGHT: 1,
-        MAX_WEIGHT: 6,
-        MIN_HEIGHT: 30,
-        MAX_HEIGHT: 70
-    },
-    
-    // Configurações de interface
-    UI: {
-        ANIMATION_DURATION: 300,
-        SUCCESS_MESSAGE_DURATION: 2000
-    }
+    VERSION: '1.0.0'
 };
