@@ -4,16 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bet Baby - Apostas do Bebê</title>
-
-    <!-- Favicon de Emoji -->
+    <!-- Mantive o favicon pois funciona como um ícone, não como texto -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍼</text></svg>">
-
-    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-
-    <!-- CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -21,7 +16,6 @@
         <div class="header">
             <img src="https://i.imgur.com/zCPAzfw.png" alt="Baby Bet Logo" class="logo">
         </div>
-
         <div class="main-content">
             <div class="bet-form">
                 <h2>Fazer Aposta</h2>
@@ -30,41 +24,32 @@
                         <label for="name">Seu Nome:</label>
                         <input type="text" id="name" required placeholder="Digite seu nome">
                     </div>
-
                     <div class="form-group">
                         <label for="date">Data do Nascimento:</label>
-                        <input type="date" id="date" required>
+                        <input type="date" id="date" required max="2025-12-31">
                     </div>
-
                     <div class="form-group">
                         <label for="time">Hora do Nascimento:</label>
                         <input type="time" id="time" required>
                     </div>
-
                     <div class="form-group">
                         <label for="weight">Peso (kg):</label>
-                        <input type="number" id="weight" step="0.1" min="1" max="6" required placeholder="Ex: 3.2">
+                        <input type="text" id="weight" required placeholder="Ex: 3.2" maxlength="3" oninput="formatWeight(this)">
                     </div>
-
                     <div class="form-group">
                         <label for="height">Altura (cm):</label>
                         <input type="number" id="height" min="30" max="70" required placeholder="Ex: 50">
                     </div>
-
                     <button type="submit" class="submit-btn">Fazer Aposta</button>
                 </form>
             </div>
-
             <div class="bets-list">
-                <h2> Apostas Registradas</h2>
-                <div id="betsList">
-                    <!-- As apostas serão inseridas aqui pelo JavaScript -->
-                </div>
+                <h2>Apostas Registradas</h2>
+                <div id="betsList"></div>
             </div>
         </div>
-
         <div class="stats">
-            <h3> Estatísticas das Apostas</h3>
+            <h3>Estatísticas das Apostas</h3>
             <div class="stat-item">
                 <div>Total de Apostas</div>
                 <div id="totalBets">0</div>
@@ -78,12 +63,10 @@
                 <div id="avgHeight">0 cm</div>
             </div>
             <button onclick="loadFromGoogleSheets()" class="action-btn">
-                 Atualizar Dados
+                Atualizar Dados
             </button>
         </div>
     </div>
-
-    <!-- Ordem de carregamento correta: config primeiro, depois script -->
     <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
