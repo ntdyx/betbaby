@@ -71,11 +71,21 @@ h2 {
     text-align: center;
     font-size: 1.8em;
     font-weight: 600;
+    /* NOVO: Garante o alinhamento perfeito do texto e dos ícones */
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 /* =================================
    FORMULÁRIO
    ================================= */
+
+/* NOVO: Regra para espaçar os ícones dentro do h2 */
+h2 .fa-solid {
+    margin: 0 10px;
+}
+
 .form-group {
     margin-bottom: 20px;
 }
@@ -152,7 +162,7 @@ h2 {
     margin-bottom: 0;
 }
 
-/* NOVAS REGRAS PARA A FRASE */
+/* Regras para a frase da aposta */
 .bet-item p {
     line-height: 1.6;
     font-size: 1.1em;
