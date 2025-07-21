@@ -1,3 +1,20 @@
+/* =================================
+   PALETA DE CORES E VARIÁVEIS
+   ================================= */
+:root {
+    --bg-dark: #2A2A2A;
+    --card-bg: #333333;
+    --text-peach: #F2C4AE;
+    --text-mint: #A9D0C3;
+    --accent-blue: #B3D4D8;
+    --text-light: #F0F0F0;
+    --border-color: #4a4a4a;
+    --font-primary: 'Poppins', 'Nunito', 'Arial', sans-serif;
+}
+
+/* =================================
+   RESET E ESTILOS GERAIS
+   ================================= */
 * {
     margin: 0;
     padding: 0;
@@ -5,10 +22,11 @@
 }
 
 body {
-    font-family: 'Arial', sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    min-height: 100vh;
+    font-family: var(--font-primary);
+    background-color: var(--bg-dark);
+    color: var(--text-light);
     padding: 20px;
+    min-height: 100vh;
 }
 
 .container {
@@ -16,23 +34,23 @@ body {
     margin: 0 auto;
 }
 
+/* =================================
+   CABEÇALHO COM A LOGO
+   ================================= */
 .header {
     text-align: center;
-    margin-bottom: 40px;
-    color: white;
+    margin-bottom: 50px;
 }
 
-.header h1 {
-    font-size: 3em;
-    margin-bottom: 10px;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+.logo {
+    max-width: 300px; /* Ajuste o tamanho da logo conforme necessário */
+    width: 100%;
+    height: auto;
 }
 
-.header p {
-    font-size: 1.2em;
-    opacity: 0.9;
-}
-
+/* =================================
+   CONTEÚDO PRINCIPAL (FORMULÁRIO E LISTA)
+   ================================= */
 .main-content {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -40,26 +58,24 @@ body {
     margin-bottom: 40px;
 }
 
-.bet-form {
-    background: white;
+.bet-form, .bets-list {
+    background-color: var(--card-bg);
     padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    transform: translateY(0);
-    transition: transform 0.3s ease;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
 }
 
-.bet-form:hover {
-    transform: translateY(-5px);
-}
-
-.bet-form h2 {
-    color: #764ba2;
-    margin-bottom: 20px;
+h2 {
+    color: var(--text-peach);
+    margin-bottom: 25px;
     text-align: center;
     font-size: 1.8em;
+    font-weight: 600;
 }
 
+/* =================================
+   FORMULÁRIO
+   ================================= */
 .form-group {
     margin-bottom: 20px;
 }
@@ -67,150 +83,147 @@ body {
 .form-group label {
     display: block;
     margin-bottom: 8px;
-    font-weight: bold;
-    color: #333;
+    font-weight: 600;
+    color: var(--text-light);
 }
 
-.form-group input,
-.form-group select {
+.form-group input {
     width: 100%;
     padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 10px;
+    background-color: var(--bg-dark);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
     font-size: 16px;
-    transition: border-color 0.3s ease;
+    color: var(--text-light);
+    font-family: var(--font-primary);
 }
 
-.form-group input:focus,
-.form-group select:focus {
+.form-group input:focus {
     outline: none;
-    border-color: #667eea;
+    border-color: var(--text-mint);
+    box-shadow: 0 0 0 3px rgba(169, 208, 195, 0.3); /* Sombra suave com a cor menta */
+}
+
+::placeholder {
+    color: #888;
 }
 
 .submit-btn {
     width: 100%;
     padding: 15px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    background-color: var(--text-mint);
+    color: var(--bg-dark); /* Texto escuro para contraste */
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 18px;
     font-weight: bold;
     cursor: pointer;
-    transition: transform 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .submit-btn:hover {
+    background-color: var(--accent-blue);
     transform: translateY(-2px);
 }
 
 .submit-btn:disabled {
-    opacity: 0.7;
+    opacity: 0.6;
     cursor: not-allowed;
 }
 
+/* =================================
+   LISTA DE APOSTAS
+   ================================= */
 .bets-list {
-    background: white;
-    padding: 30px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    max-height: 600px;
+    max-height: 550px;
     overflow-y: auto;
 }
 
-.bets-list h2 {
-    color: #764ba2;
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: 1.8em;
-}
-
 .bet-item {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    color: white;
+    background-color: transparent;
     padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 15px;
-    animation: slideIn 0.5s ease;
+    margin-bottom: 10px;
+    border-bottom: 1px solid var(--border-color); /* Separador sutil */
+    animation: fadeIn 0.5s ease;
 }
 
 .bet-item:last-child {
+    border-bottom: none;
     margin-bottom: 0;
 }
 
 .bet-name {
     font-size: 1.2em;
     font-weight: bold;
+    color: var(--text-peach);
     margin-bottom: 5px;
 }
 
 .bet-details {
-    font-size: 0.9em;
+    font-size: 1em;
+    color: var(--text-light);
     opacity: 0.9;
 }
 
+/* =================================
+   ESTATÍSTICAS E AÇÕES
+   ================================= */
 .stats {
-    background: white;
-    padding: 20px;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-    margin-top: 20px;
+    background: var(--card-bg);
+    padding: 25px;
+    border-radius: 16px;
+    border: 1px solid var(--border-color);
     text-align: center;
 }
 
 .stats h3 {
-    color: #764ba2;
-    margin-bottom: 15px;
+    color: var(--text-peach);
+    margin-bottom: 20px;
+    font-size: 1.5em;
 }
 
 .stat-item {
     display: inline-block;
-    margin: 0 20px;
-    padding: 10px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    border-radius: 10px;
-    min-width: 100px;
+    margin: 0 15px;
+    color: var(--text-light);
+    min-width: 120px;
 }
 
-.emoji {
-    font-size: 2em;
-    margin-bottom: 10px;
-    display: block;
+.stat-item div:first-of-type {
+    font-size: 1em;
+    margin-bottom: 5px;
+}
+
+/* Destaca o número da estatística com a cor menta */
+#totalBets, #avgWeight, #avgHeight {
+    font-size: 1.8em;
+    font-weight: bold;
+    color: var(--text-mint);
 }
 
 .action-btn {
-    margin: 15px 10px;
-    padding: 10px 20px;
-    color: white;
+    margin-top: 25px;
+    padding: 12px 25px;
+    background-color: var(--text-mint);
+    color: var(--bg-dark);
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: bold;
-    transition: transform 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
 .action-btn:hover {
+    background-color: var(--accent-blue);
     transform: translateY(-2px);
 }
 
-.action-btn.success {
-    background: #4CAF50;
-}
-
-.action-btn.danger {
-    background: #f44336;
-}
-
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateX(-20px);
-    }
-    to {
-        opacity: 1;
-        transform: translateX(0);
-    }
+/* =================================
+   ANIMAÇÕES E MEDIA QUERIES
+   ================================= */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 @media (max-width: 768px) {
@@ -218,12 +231,14 @@ body {
         grid-template-columns: 1fr;
     }
     
-    .header h1 {
-        font-size: 2em;
+    .logo {
+        max-width: 250px;
     }
-    
+
+    h2 { font-size: 1.5em; }
+
     .stat-item {
-        margin: 5px;
-        min-width: 80px;
+        display: block;
+        margin: 15px auto;
     }
 }
