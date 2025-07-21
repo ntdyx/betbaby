@@ -1,6 +1,6 @@
 // Configurações do projeto
 const CONFIG = {
-    GOOGLE_SHEETS_URL: 'https://script.google.com/macros/s/AKfycbwXYRqmzEwSsj57XD8X9O7EntkA0jJ6NAkqzjXHmlSdHa9kKhchoJFhp8xJyo2N2RHh/exec',
+    GOOGLE_SHEETS_URL: 'https://script.google.com/macros/s/AKfycbyamznAjWjvJtz96hUJQ2cjKAYTTtQUbMLb2CDkJhIJAuTKEMI3EvdFppOnxBbQEETq/exec',
     APP_NAME: 'Bet Baby',
     VERSION: '1.0.0',
     
