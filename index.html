@@ -1,87 +1,179 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bet Baby - Apostas do Bebê</title>
+// =================================================================
+// SCRIPT.JS - VERSÃO FINAL COM CÁLCULO DE DATA MÉDIA
+// =================================================================
+
+const GOOGLE_SHEETS_URL = CONFIG.GOOGLE_SHEETS_URL;
+let bets = [];
+
+// --- FUNÇÕES DE COMUNICAÇÃO COM API ---
+async function sendToGoogleSheets(betData) {
+    try {
+        const response = await fetch(GOOGLE_SHEETS_URL, {
+            method: 'POST',
+            body: JSON.stringify(betData),
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' }
+        });
+        const result = await response.json();
+        if (result.result === 'success') return true;
+        console.error('Erro retornado pelo script do Google:', result.error);
+        return false;
+    } catch (error) {
+        console.error('Erro de conexão ao enviar dados:', error);
+        return false;
+    }
+}
+
+async function loadFromGoogleSheets() {
+    try {
+        const response = await fetch(GOOGLE_SHEETS_URL + '?action=get');
+        if (response.ok) {
+            const data = await response.json();
+            bets = data || [];
+            displayBets();
+            updateStats();
+            console.log('Dados carregados com sucesso!');
+        } else {
+            console.error('Falha ao carregar dados. Status:', response.status);
+        }
+    } catch (error) {
+        console.error('Erro de conexão ao carregar dados:', error);
+    }
+}
+
+
+// --- FUNÇÕES DE FORMATAÇÃO E UTILIDADE ---
+function setDynamicDateLimits() {
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('date').setAttribute('min', today);
+}
+function formatDate(dateStr) {
+    if (!dateStr) return 'Data Inválida';
+    const date = new Date(dateStr);
+    if (isNaN(date.getTime())) return 'Data Inválida';
+    date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
+    return date.toLocaleDateString('pt-BR');
+}
+function formatTime(timeInput) {
+    if (timeInput instanceof Date) {
+        return timeInput.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    }
+    if (typeof timeInput === 'string') { return timeInput; }
+    return 'Hora Inválida';
+}
+
+
+// --- FUNÇÕES DE ATUALIZAÇÃO DA INTERFACE ---
+function updateStats() {
+    const totalBets = bets.length;
+    document.getElementById('totalBets').textContent = totalBets;
     
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍼</text></svg>">
+    // Pega o elemento da data média
+    const avgDateElement = document.getElementById('avgDate');
+
+    if (totalBets === 0) {
+        document.getElementById('avgWeight').textContent = '0 kg';
+        document.getElementById('avgHeight').textContent = '0 cm';
+        avgDateElement.textContent = '--/--/----'; // Reseta o texto
+        return;
+    }
+
+    // --- LÓGICA DO CÁLCULO DAS MÉDIAS ---
+    let totalWeight = 0;
+    let totalHeight = 0;
+    let totalTimestamps = 0;
+
+    bets.forEach(bet => {
+        totalWeight += parseFloat(bet.weight || 0);
+        totalHeight += parseInt(bet.height || 0);
+
+        // Converte data e hora para um timestamp numérico
+        const datePart = new Date(bet.date);
+        const timePart = new Date(bet.time);
+
+        if (!isNaN(datePart.getTime()) && !isNaN(timePart.getTime())) {
+            const combinedDateTime = new Date(
+                datePart.getFullYear(),
+                datePart.getMonth(),
+                datePart.getDate(),
+                timePart.getHours(),
+                timePart.getMinutes()
+            );
+            totalTimestamps += combinedDateTime.getTime();
+        }
+    });
+
+    const avgWeight = (totalWeight / totalBets).toFixed(1);
+    const avgHeight = Math.round(totalHeight / totalBets);
     
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
-    
-    <!-- A linha do Font Awesome foi REMOVIDA -->
+    // --- LÓGICA DO CÁLCULO DA DATA MÉDIA ---
+    if (totalTimestamps > 0) {
+        const avgTimestamp = totalTimestamps / totalBets;
+        const avgDate = new Date(avgTimestamp);
+        const formattedDate = avgDate.toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
+        const formattedTime = avgDate.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+        avgDateElement.textContent = `${formattedDate} às ${formattedTime}`;
+    } else {
+        avgDateElement.textContent = 'Inválido';
+    }
 
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <img src="https://i.imgur.com/zCPAzfw.png" alt="Baby Bet Logo" class="logo">
-        </div>
+    document.getElementById('avgWeight').textContent = `${avgWeight} kg`;
+    document.getElementById('avgHeight').textContent = `${avgHeight} cm`;
+}
 
-        <div class="main-content">
-            <div class="bet-form">
-                <!-- ESTRUTURA CORRETA USANDO A SUA IMAGEM -->
-                <h2 class="title-with-icons">
-                    <img src="https://i.ibb.co/pBx6n2qh/20250721-1350-Tigre-Minimalista-Pastel-simple-compose-01k0py5wtse62r2xnq95s8aajj.png" alt="Ícone de tigre" class="h2-icon">
-                    <span>Fazer Aposta</span>
-                    <img src="https://i.ibb.co/pBx6n2qh/20250721-1350-Tigre-Minimalista-Pastel-simple-compose-01k0py5wtse62r2xnq95s8aajj.png" alt="Ícone de tigre" class="h2-icon">
-                </h2>
-                
-                <form id="betForm">
-                    <!-- ... resto do formulário não muda ... -->
-                    <div class="form-group">
-                        <label for="name">Seu Nome:</label>
-                        <input type="text" id="name" required placeholder="Digite seu nome">
-                    </div>
-                    <div class="form-group">
-                        <label for="date">Data do Nascimento da Ana:</label>
-                        <input type="date" id="date" required max="2025-12-31">
-                    </div>
-                    <div class="form-group">
-                        <label for="time">Hora do Nascimento da Ana:</label>
-                        <input type="time" id="time" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="weight">Peso da Ana(kg):</label>
-                        <input type="text" id="weight" required placeholder="Ex: 3.2" maxlength="3" oninput="formatWeight(this)">
-                    </div>
-                    <div class="form-group">
-                        <label for="height">Altura da Ana (cm):</label>
-                        <input type="number" id="height" min="30" max="70" required placeholder="Ex: 50">
-                    </div>
-                    <button type="submit" class="submit-btn">Fazer Aposta</button>
-                </form>
-            </div>
 
-            <div class="bets-list">
-                <h2>Apostas Registradas</h2>
-                <div id="betsList"></div>
-            </div>
-        </div>
+function displayBets() {
+    // ... (esta função não precisa de mudanças)
+    const betsList = document.getElementById('betsList');
+    if (!bets || bets.length === 0) {
+        betsList.innerHTML = `<div class="bet-item"><p>Nenhuma aposta ainda. Seja o primeiro!</p></div>`;
+        return;
+    }
+    bets.sort((a, b) => new Date(a.date) - new Date(b.date));
+    betsList.innerHTML = bets.map(bet => {
+        const timeObj = new Date(bet.time);
+        const formattedTime = !isNaN(timeObj.getTime()) ? timeObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : formatTime(bet.time);
+        return `<div class="bet-item"><p><strong>${bet.name || 'Alguém'}</strong> apostou que Ana vai nascer em <strong>${formatDate(bet.date)}</strong> às <strong>${formattedTime}</strong>, pesando <strong>${bet.weight || 'N/A'}kg</strong> e medindo <strong>${bet.height || 'N/A'}cm</strong>.</p></div>`
+    }).join('');
+}
 
-        <div class="stats">
-            <h3>Estatísticas das Apostas</h3>
-            <div class="stat-item">
-                <div>Total de Apostas</div>
-                <div id="totalBets">0</div>
-            </div>
-            <div class="stat-item">
-                <div>Peso Médio</div>
-                <div id="avgWeight">0 kg</div>
-            </div>
-            <div class="stat-item">
-                <div>Altura Média</div>
-                <div id="avgHeight">0 cm</div>
-            </div>
-            <button onclick="loadFromGoogleSheets()" class="action-btn">
-                Atualizar Dados
-            </button>
-        </div>
-    </div>
 
-    <script src="script.js"></script>
-</body>
-</html>
+// --- EVENT LISTENERS E INICIALIZAÇÃO ---
+document.getElementById('betForm').addEventListener('submit', async function(e) {
+    // ... (esta função não precisa de mudanças)
+    e.preventDefault();
+    const submitBtn = document.querySelector('.submit-btn');
+    const originalText = submitBtn.textContent;
+    const weightInput = document.getElementById('weight').value;
+    const correctedWeight = weightInput.replace(',', '.');
+    if (isNaN(parseFloat(correctedWeight))) {
+        alert("Por favor, insira um valor de peso válido (ex: 3.2).");
+        return;
+    }
+    submitBtn.textContent = 'Enviando...';
+    submitBtn.disabled = true;
+
+    const newBet = {
+        name: document.getElementById('name').value,
+        date: document.getElementById('date').value,
+        time: document.getElementById('time').value,
+        weight: correctedWeight,
+        height: document.getElementById('height').value,
+        timestamp: new Date().toISOString()
+    };
+
+    const success = await sendToGoogleSheets(newBet);
+    if (success) {
+        await loadFromGoogleSheets();
+        document.getElementById('betForm').reset();
+        submitBtn.textContent = 'Aposta Enviada!';
+        setTimeout(() => { submitBtn.textContent = originalText; submitBtn.disabled = false; }, 2000);
+    } else {
+        alert('Ocorreu um erro ao enviar sua aposta. Verifique os dados e tente novamente.');
+        submitBtn.textContent = 'Erro ao Enviar';
+        setTimeout(() => { submitBtn.textContent = originalText; submitBtn.disabled = false; }, 3000);
+    }
+});
+
+// Inicialização da página
+setDynamicDateLimits();
+loadFromGoogleSheets();
