@@ -2,13 +2,21 @@
    PALETA DE CORES E VARIÁVEIS
    ================================= */
 :root {
-    --bg-dark: #2A2A2A;
-    --card-bg: #333333;
+    /* COR DE FUNDO PRINCIPAL (AJUSTADA CONFORME SOLICITADO) */
+    --bg-dark: #24232A; 
+
+    /* Cor do "cartão" ligeiramente mais clara para um contraste sutil (tom sobre tom) */
+    --card-bg: #302f36; 
+    
+    /* Cores de destaque mantidas para botões e títulos */
     --text-peach: #F2C4AE;
     --text-mint: #A9D0C3;
     --accent-blue: #B3D4D8;
+    
+    /* Texto principal e cor da borda ajustada para o novo fundo */
     --text-light: #F0F0F0;
-    --border-color: #4a4a4a;
+    --border-color: #44434b; /* Borda sutil */
+    
     --font-primary: 'Poppins', 'Nunito', 'Arial', sans-serif;
 }
 
@@ -43,7 +51,7 @@ body {
 }
 
 .logo {
-    max-width: 300px; /* Ajuste o tamanho da logo conforme necessário */
+    max-width: 300px;
     width: 100%;
     height: auto;
 }
@@ -101,7 +109,7 @@ h2 {
 .form-group input:focus {
     outline: none;
     border-color: var(--text-mint);
-    box-shadow: 0 0 0 3px rgba(169, 208, 195, 0.3); /* Sombra suave com a cor menta */
+    box-shadow: 0 0 0 3px rgba(169, 208, 195, 0.3);
 }
 
 ::placeholder {
@@ -112,7 +120,7 @@ h2 {
     width: 100%;
     padding: 15px;
     background-color: var(--text-mint);
-    color: var(--bg-dark); /* Texto escuro para contraste */
+    color: var(--bg-dark);
     border: none;
     border-radius: 8px;
     font-size: 18px;
@@ -143,7 +151,7 @@ h2 {
     background-color: transparent;
     padding: 15px;
     margin-bottom: 10px;
-    border-bottom: 1px solid var(--border-color); /* Separador sutil */
+    border-bottom: 1px solid var(--border-color);
     animation: fadeIn 0.5s ease;
 }
 
@@ -194,7 +202,6 @@ h2 {
     margin-bottom: 5px;
 }
 
-/* Destaca o número da estatística com a cor menta */
 #totalBets, #avgWeight, #avgHeight {
     font-size: 1.8em;
     font-weight: bold;
