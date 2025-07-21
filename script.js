@@ -1,5 +1,5 @@
 // Configuração do Google Sheets
-const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbyamznAjWjvJtz96hUJQ2cjKAYTTtQUbMLb2CDkJhIJAuTKEMI3EvdFppOnxBbQEETq/exec';
+const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/AKfycbzxRn1NwT2mpTcQ5U7D7XFP4vex_qP7KCkWevEanTsnR8KtsmChyC-ISxea29p4DzVx/exec';
 
 // Carregar apostas do localStorage (backup local) ou inicializar array vazio
 let bets = JSON.parse(localStorage.getItem('betBabyData')) || [];
