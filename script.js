@@ -1,12 +1,11 @@
 // =================================================================
-// SCRIPT PRINCIPAL DO BET BABY - VERSÃO SEM EMOJIS
+// SCRIPT PRINCIPAL DO BET BABY - VERSÃO COM FRASE
 // =================================================================
 
 const GOOGLE_SHEETS_URL = CONFIG.GOOGLE_SHEETS_URL;
 let bets = [];
 
 // --- FUNÇÕES DE COMUNICAÇÃO COM API ---
-
 async function sendToGoogleSheets(betData) {
     try {
         const response = await fetch(GOOGLE_SHEETS_URL, {
@@ -43,7 +42,6 @@ async function loadFromGoogleSheets() {
 }
 
 // --- FUNÇÕES DE FORMATAÇÃO E UTILIDADE ---
-
 function formatWeight(input) {
     let value = input.value.replace(/[^0-9]/g, '');
     if (value.length > 1) {
@@ -65,17 +63,24 @@ function formatDate(dateStr) {
     return date.toLocaleDateString('pt-BR');
 }
 
-function formatTime(timeStr) {
-    if (!timeStr || typeof timeStr !== 'string') return '';
-    return timeStr.substring(0, 5);
+function formatTime(timeInput) {
+    // A hora do Google Sheets pode vir como objeto Date
+    if (timeInput instanceof Date) {
+        return timeInput.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    }
+    // A hora do formulário vem como string 'HH:mm'
+    if (typeof timeInput === 'string') {
+        return timeInput;
+    }
+    return 'Hora Inválida';
 }
 
-// --- FUNÇÕES DE ATUALIZAÇÃO DA INTERFACE ---
 
+// --- FUNÇÕES DE ATUALIZAÇÃO DA INTERFACE ---
 function updateStats() {
+    // ... (esta função não precisa de mudanças)
     const totalBets = bets.length;
     document.getElementById('totalBets').textContent = totalBets;
-
     if (totalBets === 0) {
         document.getElementById('avgWeight').textContent = '0 kg';
         document.getElementById('avgHeight').textContent = '0 cm';
@@ -92,30 +97,28 @@ function updateStats() {
 function displayBets() {
     const betsList = document.getElementById('betsList');
     if (!bets || bets.length === 0) {
-        betsList.innerHTML = `<div class="bet-item"><div class="bet-name">Nenhuma aposta ainda</div><div class="bet-details">Seja o primeiro a fazer uma aposta!</div></div>`;
+        betsList.innerHTML = `<div class="bet-item"><p>Nenhuma aposta ainda. Seja o primeiro!</p></div>`;
         return;
     }
     bets.sort((a, b) => new Date(a.date) - new Date(b.date));
+    
+    // NOVO: Monta a frase completa
     betsList.innerHTML = bets.map(bet => {
-        // Formata a hora a partir do objeto Date que vem do Google
         const timeObj = new Date(bet.time);
         const formattedTime = !isNaN(timeObj.getTime()) ? timeObj.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : 'Hora Inválida';
 
         return `
         <div class="bet-item">
-            <div class="bet-name">${bet.name || 'Anônimo'}</div>
-            <div class="bet-details">
-                Data: ${formatDate(bet.date)} às ${formattedTime} | 
-                Peso: ${bet.weight || 'N/A'}kg | 
-                Altura: ${bet.height || 'N/A'}cm
-            </div>
+            <p>
+                <strong>${bet.name || 'Alguém'}</strong> apostou que Ana vai nascer em <strong>${formatDate(bet.date)}</strong> às <strong>${formattedTime}</strong>, pesando <strong>${bet.weight || 'N/A'}kg</strong> e medindo <strong>${bet.height || 'N/A'}cm</strong>.
+            </p>
         </div>
     `}).join('');
 }
 
 // --- EVENT LISTENERS E INICIALIZAÇÃO ---
-
 document.getElementById('betForm').addEventListener('submit', async function(e) {
+    // ... (esta função não precisa de mudanças)
     e.preventDefault();
     const submitBtn = document.querySelector('.submit-btn');
     const originalText = submitBtn.textContent;
