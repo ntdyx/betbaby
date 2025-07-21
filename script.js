@@ -2,7 +2,7 @@
 // SCRIPT PRINCIPAL DO BET BABY - VERSÃO COM FRASE
 // =================================================================
 
-const GOOGLE_SHEETS_URL = CONFIG.GOOGLE_SHEETS_URL;
+const GOOGLE_SHEETS_URL = CONFIG.https://script.google.com/macros/s/AKfycbzxRn1NwT2mpTcQ5U7D7XFP4vex_qP7KCkWevEanTsnR8KtsmChyC-ISxea29p4DzVx/exec;
 let bets = [];
 
 // --- FUNÇÕES DE COMUNICAÇÃO COM API ---
