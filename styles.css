@@ -71,20 +71,26 @@ h2 {
     text-align: center;
     font-size: 1.8em;
     font-weight: 600;
-    /* NOVO: Garante o alinhamento perfeito do texto e dos ícones */
-    display: flex;
-    align-items: center;
-    justify-content: center;
 }
 
 /* =================================
    FORMULÁRIO
    ================================= */
 
-/* NOVO: Regra para espaçar os ícones dentro do h2 */
-h2 .fa-solid {
-    margin: 0 10px;
+/* AQUI ESTÁ A MÁGICA: Regras para o título com as imagens */
+.title-with-icons {
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
+
+.h2-icon {
+    /* Esta linha faz a mágica: a altura da imagem será igual à altura do texto. */
+    height: 1em;
+    width: auto; /* Mantém a proporção da imagem */
+    margin: 0 10px; /* Adiciona um espaço lateral */
+}
+
 
 .form-group {
     margin-bottom: 20px;
