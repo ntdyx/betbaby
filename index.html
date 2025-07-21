@@ -4,14 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bet Baby - Apostas do Bebê</title>
+
+    <!-- Favicon de Emoji -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍼</text></svg>">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <div class="header">
-    <!-- Usamos a imagem como o novo cabeçalho -->
-    <img src="https://i.imgur.com/zCPAzfw.png" alt="Baby Bet Logo" class="logo">
-</div>
+            <img src="https://i.imgur.com/zCPAzfw.png" alt="Baby Bet Logo" class="logo">
+        </div>
 
         <div class="main-content">
             <div class="bet-form">
@@ -28,12 +37,12 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="time">Hora do Nascimento (Usar hora de 24 horas):</label>
+                        <label for="time">Hora do Nascimento:</label>
                         <input type="time" id="time" required>
                     </div>
 
                     <div class="form-group">
-                        <label for="weight">⚖Peso (kg):</label>
+                        <label for="weight">Peso (kg):</label>
                         <input type="number" id="weight" step="0.1" min="1" max="6" required placeholder="Ex: 3.2">
                     </div>
 
@@ -47,18 +56,15 @@
             </div>
 
             <div class="bets-list">
-                <h2>Apostas Registradas</h2>
+                <h2> Apostas Registradas</h2>
                 <div id="betsList">
-                    <div class="bet-item">
-                        <div class="bet-name">Ainda não há apostas</div>
-                        <div class="bet-details">Seja o primeiro a fazer uma aposta!</div>
-                    </div>
+                    <!-- As apostas serão inseridas aqui pelo JavaScript -->
                 </div>
             </div>
         </div>
 
         <div class="stats">
-            <h3>Estatísticas das Apostas</h3>
+            <h3> Estatísticas das Apostas</h3>
             <div class="stat-item">
                 <div>Total de Apostas</div>
                 <div id="totalBets">0</div>
@@ -71,12 +77,14 @@
                 <div>Altura Média</div>
                 <div id="avgHeight">0 cm</div>
             </div>
-            <button onclick="loadFromGoogleSheets()" class="action-btn success">
-                Atualizar Dados
+            <button onclick="loadFromGoogleSheets()" class="action-btn">
+                 Atualizar Dados
             </button>
         </div>
     </div>
 
+    <!-- Ordem de carregamento correta: config primeiro, depois script -->
+    <script src="config.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
