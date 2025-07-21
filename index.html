@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bet Baby - Apostas do Bebê</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍼 Bet Baby 👶</h1>
+            <p>Faça sua aposta sobre quando o bebê vai nascer!</p>
+        </div>
+
+        <div class="main-content">
+            <div class="bet-form">
+                <h2>📝 Fazer Aposta</h2>
+                <form id="betForm">
+                    <div class="form-group">
+                        <label for="name">👤 Seu Nome:</label>
+                        <input type="text" id="name" required placeholder="Digite seu nome">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="date">📅 Data do Nascimento:</label>
+                        <input type="date" id="date" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="time">🕐 Hora do Nascimento:</label>
+                        <input type="time" id="time" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="weight">⚖️ Peso (kg):</label>
+                        <input type="number" id="weight" step="0.1" min="1" max="6" required placeholder="Ex: 3.2">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="height">📏 Altura (cm):</label>
+                        <input type="number" id="height" min="30" max="70" required placeholder="Ex: 50">
+                    </div>
+
+                    <button type="submit" class="submit-btn">🎯 Fazer Aposta</button>
+                </form>
+            </div>
+
+            <div class="bets-list">
+                <h2>🏆 Apostas Registradas</h2>
+                <div id="betsList">
+                    <div class="bet-item">
+                        <div class="bet-name">📝 Ainda não há apostas</div>
+                        <div class="bet-details">Seja o primeiro a fazer uma aposta!</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="stats">
+            <h3>📊 Estatísticas das Apostas</h3>
+            <div class="stat-item">
+                <span class="emoji">📝</span>
+                <div>Total de Apostas</div>
+                <div id="totalBets">0</div>
+            </div>
+            <div class="stat-item">
+                <span class="emoji">⚖️</span>
+                <div>Peso Médio</div>
+                <div id="avgWeight">0 kg</div>
+            </div>
+            <div class="stat-item">
+                <span class="emoji">📏</span>
+                <div>Altura Média</div>
+                <div id="avgHeight">0 cm</div>
+            </div>
+            <button onclick="loadFromGoogleSheets()" class="action-btn success">
+                🔄 Atualizar Dados
+            </button>
+            <button onclick="clearAllBets()" class="action-btn danger">
+                🗑️ Limpar Dados Locais
+            </button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
