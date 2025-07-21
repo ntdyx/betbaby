@@ -1,19 +1,10 @@
-// =================================================================
-// SCRIPT PRINCIPAL DO BET BABY
-// =================================================================
+// script.js - VERSÃO CORRETA
 
-// Lê a URL do arquivo de configuração
-const GOOGLE_SHEETS_URL = CONFIG.https://script.google.com/macros/s/AKfycbzxRn1NwT2mpTcQ5U7D7XFP4vex_qP7KCkWevEanTsnR8KtsmChyC-ISxea29p4DzVx/exec;
+// LINHA 6 CORRIGIDA: Ele busca a URL do objeto CONFIG
+const GOOGLE_SHEETS_URL = CONFIG.GOOGLE_SHEETS_URL;
 
-// Variável para armazenar as apostas localmente
 let bets = [];
 
-/**
- * Envia uma nova aposta para a planilha do Google Sheets.
- * Usa a configuração de 'text/plain' para evitar o erro de CORS.
- * @param {object} betData - O objeto contendo os dados da aposta.
- * @returns {Promise<boolean>} - True se o envio for bem-sucedido, false caso contrário.
- */
 async function sendToGoogleSheets(betData) {
     try {
         const response = await fetch(GOOGLE_SHEETS_URL, {
@@ -32,18 +23,15 @@ async function sendToGoogleSheets(betData) {
             console.log('Dados enviados com sucesso para Google Sheets!');
             return true;
         } else {
-            console.error('Erro retornado pelo script do Google:', result.error);
+            console.error('Erro retornado pelo Google Sheets:', result.error);
             return false;
         }
     } catch (error) {
-        console.error('Erro de conexão ao enviar dados:', error);
+        console.error('Erro de conexão ao enviar:', error);
         return false;
     }
 }
 
-/**
- * Carrega todas as apostas da planilha do Google Sheets.
- */
 async function loadFromGoogleSheets() {
     try {
         const response = await fetch(GOOGLE_SHEETS_URL + '?action=get');
@@ -54,18 +42,13 @@ async function loadFromGoogleSheets() {
             updateStats();
             console.log('Dados carregados com sucesso!');
         } else {
-            console.error('Falha ao carregar dados do Google Sheets. Status:', response.status);
+            console.error('Falha ao carregar dados. Status:', response.status);
         }
     } catch (error) {
-        console.error('Erro de conexão ao carregar dados:', error);
+        console.error('Erro de conexão ao carregar:', error);
     }
 }
 
-/**
- * Formata a data para o padrão pt-BR e corrige o bug de fuso horário.
- * @param {string} dateStr - A data no formato 'YYYY-MM-DD'.
- * @returns {string} - A data formatada como 'DD/MM/YYYY'.
- */
 function formatDate(dateStr) {
     if (!dateStr) return 'Data Inválida';
     const date = new Date(dateStr);
@@ -73,18 +56,10 @@ function formatDate(dateStr) {
     return date.toLocaleDateString('pt-BR');
 }
 
-/**
- * Retorna a string de tempo como ela é.
- * @param {string} timeStr - A hora no formato 'HH:MM'.
- * @returns {string} - A hora.
- */
 function formatTime(timeStr) {
     return timeStr || '';
 }
 
-/**
- * Atualiza as estatísticas (Total, Peso Médio, Altura Média).
- */
 function updateStats() {
     const totalBets = bets.length;
     document.getElementById('totalBets').textContent = totalBets;
@@ -105,9 +80,6 @@ function updateStats() {
     document.getElementById('avgHeight').textContent = `${avgHeight} cm`;
 }
 
-/**
- * Renderiza a lista de apostas na página.
- */
 function displayBets() {
     const betsList = document.getElementById('betsList');
     
@@ -135,7 +107,6 @@ function displayBets() {
     `).join('');
 }
 
-// Event listener para o envio do formulário
 document.getElementById('betForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     
@@ -156,7 +127,7 @@ document.getElementById('betForm').addEventListener('submit', async function(e) 
     const success = await sendToGoogleSheets(newBet);
     
     if (success) {
-        await loadFromGoogleSheets(); // Recarrega os dados para incluir a nova aposta
+        await loadFromGoogleSheets();
         document.getElementById('betForm').reset();
         
         submitBtn.textContent = '✅ Aposta Enviada!';
@@ -173,5 +144,4 @@ document.getElementById('betForm').addEventListener('submit', async function(e) 
     }
 });
 
-// Carrega os dados do Google Sheets assim que a página é aberta
 loadFromGoogleSheets();
