@@ -1,34 +1,49 @@
-// USA A URL DEFINIDA NO ARQUIVO config.js
+// =================================================================
+// SCRIPT PRINCIPAL DO BET BABY
+// =================================================================
+
+// Lê a URL do arquivo de configuração
 const GOOGLE_SHEETS_URL = CONFIG.https://script.google.com/macros/s/AKfycbzxRn1NwT2mpTcQ5U7D7XFP4vex_qP7KCkWevEanTsnR8KtsmChyC-ISxea29p4DzVx/exec;
 
+// Variável para armazenar as apostas localmente
 let bets = [];
 
-// Função para enviar dados para Google Sheets
+/**
+ * Envia uma nova aposta para a planilha do Google Sheets.
+ * Usa a configuração de 'text/plain' para evitar o erro de CORS.
+ * @param {object} betData - O objeto contendo os dados da aposta.
+ * @returns {Promise<boolean>} - True se o envio for bem-sucedido, false caso contrário.
+ */
 async function sendToGoogleSheets(betData) {
     try {
         const response = await fetch(GOOGLE_SHEETS_URL, {
+            redirect: "follow",
             method: 'POST',
-            mode: 'cors',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(betData)
+            body: JSON.stringify(betData),
+            headers: {
+              'Content-Type': 'text/plain;charset=utf-8',
+            }
         });
 
-        const result = await response.json();
+        const resultText = await response.text();
+        const result = JSON.parse(resultText);
         
         if (result.result === 'success') {
             console.log('Dados enviados com sucesso para Google Sheets!');
             return true;
         } else {
-            console.error('Erro retornado pelo Google Sheets:', result.error);
+            console.error('Erro retornado pelo script do Google:', result.error);
             return false;
         }
     } catch (error) {
-        console.error('Erro de conexão ao enviar:', error);
+        console.error('Erro de conexão ao enviar dados:', error);
         return false;
     }
 }
 
-// Função para carregar dados do Google Sheets
+/**
+ * Carrega todas as apostas da planilha do Google Sheets.
+ */
 async function loadFromGoogleSheets() {
     try {
         const response = await fetch(GOOGLE_SHEETS_URL + '?action=get');
@@ -37,28 +52,39 @@ async function loadFromGoogleSheets() {
             bets = data || [];
             displayBets();
             updateStats();
-            console.log('Dados carregados do Google Sheets!', data);
+            console.log('Dados carregados com sucesso!');
         } else {
-            console.error('Erro ao carregar dados do Google Sheets');
+            console.error('Falha ao carregar dados do Google Sheets. Status:', response.status);
         }
     } catch (error) {
-        console.error('Erro de conexão ao carregar:', error);
+        console.error('Erro de conexão ao carregar dados:', error);
     }
 }
 
-// Funções de formatação
+/**
+ * Formata a data para o padrão pt-BR e corrige o bug de fuso horário.
+ * @param {string} dateStr - A data no formato 'YYYY-MM-DD'.
+ * @returns {string} - A data formatada como 'DD/MM/YYYY'.
+ */
 function formatDate(dateStr) {
+    if (!dateStr) return 'Data Inválida';
     const date = new Date(dateStr);
-    // Adiciona o fuso horário para corrigir bug de um dia a menos
     date.setMinutes(date.getMinutes() + date.getTimezoneOffset());
     return date.toLocaleDateString('pt-BR');
 }
 
+/**
+ * Retorna a string de tempo como ela é.
+ * @param {string} timeStr - A hora no formato 'HH:MM'.
+ * @returns {string} - A hora.
+ */
 function formatTime(timeStr) {
-    return timeStr;
+    return timeStr || '';
 }
 
-// Função para atualizar as estatísticas
+/**
+ * Atualiza as estatísticas (Total, Peso Médio, Altura Média).
+ */
 function updateStats() {
     const totalBets = bets.length;
     document.getElementById('totalBets').textContent = totalBets;
@@ -69,14 +95,19 @@ function updateStats() {
         return;
     }
 
-    const avgWeight = (bets.reduce((sum, bet) => sum + parseFloat(bet.weight), 0) / totalBets).toFixed(1);
-    const avgHeight = Math.round(bets.reduce((sum, bet) => sum + parseInt(bet.height), 0) / totalBets);
+    const totalWeight = bets.reduce((sum, bet) => sum + parseFloat(bet.weight || 0), 0);
+    const totalHeight = bets.reduce((sum, bet) => sum + parseInt(bet.height || 0), 0);
     
-    document.getElementById('avgWeight').textContent = avgWeight + ' kg';
-    document.getElementById('avgHeight').textContent = avgHeight + ' cm';
+    const avgWeight = (totalWeight / totalBets).toFixed(1);
+    const avgHeight = Math.round(totalHeight / totalBets);
+    
+    document.getElementById('avgWeight').textContent = `${avgWeight} kg`;
+    document.getElementById('avgHeight').textContent = `${avgHeight} cm`;
 }
 
-// Função para exibir as apostas na tela
+/**
+ * Renderiza a lista de apostas na página.
+ */
 function displayBets() {
     const betsList = document.getElementById('betsList');
     
@@ -90,16 +121,15 @@ function displayBets() {
         return;
     }
 
-    // Ordenar apostas por data
     bets.sort((a, b) => new Date(a.date + ' ' + a.time) - new Date(b.date + ' ' + b.time));
 
     betsList.innerHTML = bets.map(bet => `
         <div class="bet-item">
-            <div class="bet-name">${bet.name}</div>
+            <div class="bet-name">${bet.name || 'Anônimo'}</div>
             <div class="bet-details">
                 📅 ${formatDate(bet.date)} às ${formatTime(bet.time)} | 
-                ⚖️ ${bet.weight}kg | 
-                📏 ${bet.height}cm
+                ⚖️ ${bet.weight || 'N/A'}kg | 
+                📏 ${bet.height || 'N/A'}cm
             </div>
         </div>
     `).join('');
