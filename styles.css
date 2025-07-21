@@ -77,18 +77,22 @@ h2 {
    FORMULÁRIO
    ================================= */
 
-/* AQUI ESTÁ A MÁGICA: Regras para o título com as imagens */
+/* AQUI ESTÁ A CORREÇÃO FINAL PARA O TÍTULO COM ÍCONES */
 .title-with-icons {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    /* Mantém o H2 como um bloco, o alinhamento será feito nos filhos */
+}
+
+.h2-icon,
+.title-with-icons span {
+    /* Alinha verticalmente imagem e texto no meio */
+    vertical-align: middle;
 }
 
 .h2-icon {
-    /* Esta linha faz a mágica: a altura da imagem será igual à altura do texto. */
+    /* Esta é a regra mais importante: força a altura da imagem a ser igual à do texto */
     height: 1em;
-    width: auto; /* Mantém a proporção da imagem */
-    margin: 0 10px; /* Adiciona um espaço lateral */
+    width: auto; /* Mantém a proporção */
+    margin: 0 10px; /* Espaçamento lateral */
 }
 
 
